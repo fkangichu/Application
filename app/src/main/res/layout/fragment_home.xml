@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.home.HomeFragment"
-    android:orientation="horizontal">
+    tools:context=".ui.home.HomeFragment">
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/fragment_home_title" />-->
 
     <Spinner
         android:id="@+id/calenderMonths"
@@ -26,13 +30,8 @@
     <com.github.mikephil.charting.charts.PieChart
         android:layout_below="@id/calenderMonths"
         android:id="@+id/mpesaTransactions"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent" />
-
-<!--    <ListView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@id/calenderMonths"/>-->
 
     <FrameLayout
         android:layout_width="match_parent"

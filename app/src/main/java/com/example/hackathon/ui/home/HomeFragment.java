@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                 String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
 
 //                PieDataSet dataSet = new PieDataSet(, "Income");
-                pieChart.setHoleRadius(25f);
+                pieChart.setHoleRadius(45f);
                 pieChart.setTransparentCircleAlpha(0);
                 pieChart.getLegend().setEnabled(false);
 
@@ -134,22 +134,27 @@ public class HomeFragment extends Fragment {
 
                 float[] data = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
 
-                for (int i=0; i<data.length; i++) {
-                    pieEntries.add(new PieEntry(data[i], "Income"));
-                }
+                pieEntries.add(new PieEntry(data[0], "Income"));
+                pieEntries.add(new PieEntry(data[1], "Expense"));
+
+
+//                for (int i=0; i<data.length; i++) {
+//                }
 
 
 //                pieChart.setData(addDataSet());
                 PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPesa Transactions");
 
-                ArrayList<Integer> colors = new ArrayList<>();
-                colors.add(Color.BLUE);
-                colors.add(Color.RED);
+//                ArrayList<Integer> colors = new ArrayList<>();
+//                colors.add(Color.BLUE);
+//                colors.add(Color.RED);
+//                colors.add(Color.CYAN);
+//                colors.add(Color.YELLOW);
 
                 PieData pieData = new PieData(pieDataSet);
                 pieDataSet.setSliceSpace(2);
                 pieDataSet.setValueTextSize(12);
-                pieDataSet.setColors(colors);
+                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
 
                 pieChart.setData(pieData);
 
