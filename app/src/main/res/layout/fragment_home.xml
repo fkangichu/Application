@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.home.HomeFragment"
+    android:orientation="horizontal">
+
+    <Spinner
+        android:id="@+id/calenderMonths"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        />
+
+    <Spinner
+        android:id="@+id/calenderYears"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/calenderMonths"
+        android:layout_alignTop="@id/calenderMonths"
+        android:spinnerMode="dropdown"
+        />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_below="@id/calenderMonths"
+        android:id="@+id/mpesaTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@id/calenderMonths"/>-->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frameLayout" />
+
+</RelativeLayout>

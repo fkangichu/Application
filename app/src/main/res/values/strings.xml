@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Hackathon</string>
+    <string name="title_activity_home">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_loans">Loans</string>
+    <string name="title_account">Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_button">Login</string>
+</resources>
