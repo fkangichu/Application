@@ -1,15 +1,22 @@
 package com.example.hackathon.ui.home;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListPopupWindow;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -20,17 +27,27 @@ import com.example.hackathon.DatabaseHelper;
 import com.example.hackathon.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Text;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static android.content.ContentValues.TAG;
 
@@ -39,8 +56,14 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
     DatabaseHelper databaseHelper;
+
+    ListPopupWindow popupWindow;
+
     Spinner spinnerMonth;
     Spinner spinnerYear;
+
+    String yearSelected;
+
 
 //    ListView listTransactions;
 
@@ -61,6 +84,15 @@ public class HomeFragment extends Fragment {
     Map<String, Float> incomeResult = new HashMap<>();
     Map<String, Float> expenseResult = new HashMap<>();
 
+    Map<String, Float> receivedCashResult = new HashMap<>();
+    Map<String, Float> depositedCashResult = new HashMap<>();
+
+    Map<String, Float> airtimeResult = new HashMap<>();
+    Map<String, Float> paybillResult = new HashMap<>();
+    Map<String, Float> sendMoneyResult = new HashMap<>();
+    Map<String, Float> withdrawResult = new HashMap<>();
+    Map<String, Float> buyGoodsAndServicesResult = new HashMap<>();
+
     ArrayList<String> monthValues = new ArrayList<>();
     ArrayList<String> yearValues = new ArrayList<>();
 
@@ -75,14 +107,11 @@ public class HomeFragment extends Fragment {
         spinnerMonth = root.findViewById(R.id.calenderMonths);
         spinnerYear = root.findViewById(R.id.calenderYears);
 
-//        listTransactions = root.findViewById(R.id.previousTransactions);
-
         databaseHelper = new DatabaseHelper(getActivity());
 
         getMessage();
+        addPreviousTransactions();
         setDates();
-
-//        addPreviousTransactions();
 
         pieChart = root.findViewById(R.id.mpesaTransactions);
 
@@ -90,12 +119,58 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-//    private void addPreviousTransactions() {
-//        ArrayAdapter<String> transactions = new ArrayAdapter<>();
-//    }
+    private void addPreviousTransactions() {
+        for (Map.Entry<String, Float> receivedCashEntry  : income_receivedCash.entrySet()) {
+            String key = receivedCashEntry.getKey().split("-")[0] + "/" + receivedCashEntry.getKey().split("-")[1];
+            Float value = receivedCashEntry.getValue();
+            Float oldValue = receivedCashResult.get(key) != null ? receivedCashResult.get(key) : 0;
+            receivedCashResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> depositedCashEntry  : income_depositedCash.entrySet()) {
+            String key = depositedCashEntry.getKey().split("-")[0] + "/" + depositedCashEntry.getKey().split("-")[1];
+            Float value = depositedCashEntry.getValue();
+            Float oldValue = depositedCashResult.get(key) != null ? depositedCashResult.get(key) : 0;
+            depositedCashResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> airtimeEntry  : expense_airtime.entrySet()) {
+            String key = airtimeEntry.getKey().split("-")[0] + "/" + airtimeEntry.getKey().split("-")[1];
+            Float value = airtimeEntry.getValue();
+            Float oldValue = airtimeResult.get(key) != null ? airtimeResult.get(key) : 0;
+            airtimeResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> payBillEntry  : expense_payBill.entrySet()) {
+            String key = payBillEntry.getKey().split("-")[0] + "/" + payBillEntry.getKey().split("-")[1];
+            Float value = payBillEntry.getValue();
+            Float oldValue = paybillResult.get(key) != null ? paybillResult.get(key) : 0;
+            paybillResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> sendMoneyEntry  : expense_sendMoney.entrySet()) {
+            String key = sendMoneyEntry.getKey().split("-")[0] + "/" + sendMoneyEntry.getKey().split("-")[1];
+            Float value = sendMoneyEntry.getValue();
+            Float oldValue = sendMoneyResult.get(key) != null ? sendMoneyResult.get(key) : 0;
+            sendMoneyResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> withdrawEntry  : expense_withdraw.entrySet()) {
+            String key = withdrawEntry.getKey().split("-")[0] + "/" + withdrawEntry.getKey().split("-")[1];
+            Float value = withdrawEntry.getValue();
+            Float oldValue = withdrawResult.get(key) != null ? withdrawResult.get(key) : 0;
+            withdrawResult.put(key, oldValue + value);
+        }
+
+        for (Map.Entry<String, Float> buyGoodsAndServicesEntry  : expense_buyGoodsAndServices.entrySet()) {
+            String key = buyGoodsAndServicesEntry.getKey().split("-")[0] + "/" + buyGoodsAndServicesEntry.getKey().split("-")[1];
+            Float value = buyGoodsAndServicesEntry.getValue();
+            Float oldValue = buyGoodsAndServicesResult.get(key) != null ? buyGoodsAndServicesResult.get(key) : 0;
+            buyGoodsAndServicesResult.put(key, oldValue + value);
+        }
+    }
 
     private void setDates() {
-
         monthString.put("January", "01");
         monthString.put("February","02");
         monthString.put("March", "03");
@@ -109,6 +184,10 @@ public class HomeFragment extends Fragment {
         monthString.put("November", "11");
         monthString.put("December", "12");
 
+        Set<String> set = new HashSet<>(yearValues);
+        yearValues.clear();
+        yearValues.addAll(set);
+
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, monthValues);
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, yearValues);
 
@@ -118,48 +197,94 @@ public class HomeFragment extends Fragment {
         spinnerMonth.setAdapter(monthAdapter);
         spinnerYear.setAdapter(yearAdapter);
 
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, final View view, final int i, long l) {
+                yearSelected = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.v("item", (String) parent.getItemAtPosition(position));
-                String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
+            public void onItemSelected(AdapterView<?> parent, final View view, final int position, long id) {
+                final String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
 
-//                PieDataSet dataSet = new PieDataSet(, "Income");
                 pieChart.setHoleRadius(45f);
                 pieChart.setTransparentCircleAlpha(0);
                 pieChart.getLegend().setEnabled(false);
 
                 ArrayList<PieEntry> pieEntries = new ArrayList<>();
-//                ArrayList<PieEntry> pieEntriesExpenses = new ArrayList<>();
 
-                float[] data = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
+                float[] transactionOverview = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
 
-                pieEntries.add(new PieEntry(data[0], "Income"));
-                pieEntries.add(new PieEntry(data[1], "Expense"));
+                pieEntries.add(new PieEntry(transactionOverview[0], "Income"));
+                pieEntries.add(new PieEntry(transactionOverview[1], "Expenses"));
 
-
-//                for (int i=0; i<data.length; i++) {
-//                }
-
-
-//                pieChart.setData(addDataSet());
                 PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPesa Transactions");
 
-//                ArrayList<Integer> colors = new ArrayList<>();
-//                colors.add(Color.BLUE);
-//                colors.add(Color.RED);
+                ArrayList<Integer> colors = new ArrayList<>();
+                colors.add(Color.BLUE);
+                colors.add(Color.RED);
 //                colors.add(Color.CYAN);
 //                colors.add(Color.YELLOW);
 
                 PieData pieData = new PieData(pieDataSet);
                 pieDataSet.setSliceSpace(2);
                 pieDataSet.setValueTextSize(12);
-                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+//                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+                pieDataSet.setColors(colors);
 
                 pieChart.setData(pieData);
-
                 pieChart.notifyDataSetChanged();
                 pieChart.invalidate();
+
+                pieChart.setClickable(true);
+                pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                    @Override
+                    public void onValueSelected(Entry e, Highlight h) {
+                        PieEntry pe = (PieEntry) e;
+
+                        String[] incomeItems = {
+                                "Received Cash KSH " + receivedCashResult.get(monthSelected),
+                                "Deposited Cash KSH " + depositedCashResult.get(monthSelected)
+                        };
+
+                        String[] expenseItems = {
+                                "Airtime KSH " + airtimeResult.get(monthSelected),
+                                "Sent Money KSH " + sendMoneyResult.get(monthSelected),
+                                "Withdrawn Cash KSH " + withdrawResult.get(monthSelected),
+                                "PayBill KSH " + paybillResult.get(monthSelected),
+                                "Buy Goods and Services KSH " + buyGoodsAndServicesResult.get(monthSelected)
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                        if (pe.getLabel().equals("Income")) {
+                            builder.setTitle(pe.getLabel())
+                                    .setItems(incomeItems, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    }).show();
+                        }
+                        else  if (pe.getLabel().equals("Expenses")) {
+                            builder.setTitle(pe.getLabel())
+                                    .setItems(expenseItems, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    }).show();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected() {
+
+                    }
+                });
 
             }
 
@@ -171,13 +296,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void getMessage() {
-        Log.d(TAG, "get data from db");
         Cursor data = databaseHelper.getData();
 
         while (data.moveToNext()) {
             String messageBody = data.getString(1);
             String date = data.getString(2);
-//            Log.i(TAG, "getMessage: " + messageBody);
 
             if (messageBody.contains("You have received")) {
                 String receivedCash = (StringUtils.substringBetween(messageBody, "received", "from")
@@ -251,12 +374,6 @@ public class HomeFragment extends Fragment {
         }
 
         for (Map.Entry<String, Float> entry  : expenseResult.entrySet()) {
-            String key = entry.getKey();
-            Float entryExpense = entry.getValue();
-            Float entryIncome = incomeResult.get(key);
-
-//            results.put(entryExpense, entryIncome);
-
             int months = Integer.parseInt(entry.getKey().split("/")[1]);
             String year = entry.getKey().split("/")[0];
 
@@ -264,55 +381,13 @@ public class HomeFragment extends Fragment {
 
             monthValues.add(monthString);
             yearValues.add(year);
+        }
 
-//            System.out.println(key);
-//            System.out.println("Month Expense" + entry.getKey() + " - Value = " + entry.getValue());
+        for (Map.Entry<String, Float> receivedCashEntry  : income_receivedCash.entrySet()) {
+            String key = receivedCashEntry.getKey().split("-")[0] + "/" + receivedCashEntry.getKey().split("-")[1];
+            Float value = receivedCashEntry.getValue();
+            Float oldValue = receivedCashResult.get(key) != null ? receivedCashResult.get(key) : 0;
+            receivedCashResult.put(key, oldValue + value);
         }
     }
-
-//    private PieData addDataSet() {
-//        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, monthValues);
-//        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, yearValues);
-//
-//        ArrayList<PieEntry> entries1 = new ArrayList<>();
-//
-//        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        spinnerMonth.setAdapter(monthAdapter);
-//        spinnerYear.setAdapter(yearAdapter);
-//
-//        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.v("item", (String) parent.getItemAtPosition(position));
-//
-////                if ((String) parent.getItemAtPosition(position) == "November") {
-////                    Float testexpense = incomeResult.get(2020/11);
-////                    Log.i(TAG, "onItemSelected: " + testexpense);
-////                }
-//
-////                pieChart.notifyDataSetChanged();
-////                pieChart.invalidate();
-//            }
-////
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//            }
-//        });
-//
-//
-//
-//        PieDataSet ds1 = new PieDataSet(entries1, "Quarterly Revenues 2015");
-////        ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
-//        ds1.setSliceSpace(2f);
-//        ds1.setValueTextColor(Color.WHITE);
-//        ds1.setValueTextSize(12f);
-//
-//        PieData d = new PieData(ds1);
-////        d.setValueTypeface(tf);
-//
-//        return d;
-//    }
 }

@@ -3,12 +3,29 @@
     <string name="title_activity_home">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_loans">Loans</string>
-    <string name="title_account">Account</string>
+    <string name="title_account">Profile</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login_button">Login</string>
-    <string name="signup">No account? Sign Up</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="fragment_home_title">Transaction Activity</string>
+    <string name="phone_number">Phone Number 0712 345 678</string>
+    <string name="signup_phone_number">Enter phone number</string>
+    <string name="signup_button">Next</string>
+    <string name="OTP"></string>
+    <string name="otp_verification">OTP verification</string>
+    <string name="a_one_time_password_will_be_sent_to_your_phone_number">A One Time Password will be sent to your phone number</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="country_code">+254-</string>
+    <string name="phone">712345678</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="enter_otp_sent">Enter OTP sent</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="didn_t_receive_the_code">Didn\'t receive the code?</string>
+    <string name="verify">verify</string>
+    <string name="login_text">Enter the email and password to login</string>
+    <string name="no_account_sign_up">No account? Sign Up</string>
+    <string name="mpesa_transactions">MPesa Transactions</string>
 
 </resources>

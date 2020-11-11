@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -21,10 +23,17 @@ public class Home extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
+    // Write a message to the database
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference columnBody = database.getReference("Body");
+//        DatabaseReference columnDate = database.getReference("Date");
+
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -34,8 +43,8 @@ public class Home extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_loans, R.id.navigation_account)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavController navController = Navigation.findNavController(Home.this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(Home.this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
         StringBuilder smsBuilder = new StringBuilder();
@@ -65,6 +74,8 @@ public class Home extends AppCompatActivity {
                     String stringDate = DateFor.format(date);
 
 //                    System.out.println(stringDate + " " + date);
+//                    columnBody.setValue(strBody);
+//                    columnDate.setValue(stringDate);
                     AddData(strBody, stringDate);
 
                     smsBuilder.append("[ ");

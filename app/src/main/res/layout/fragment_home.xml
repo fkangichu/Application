@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     tools:context=".ui.home.HomeFragment">
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/fragment_home_title" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/fragment_home_title" />-->
 
     <Spinner
         android:id="@+id/calenderMonths"
