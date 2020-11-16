@@ -20,12 +20,27 @@
     <string name="country_code">+254-</string>
     <string name="phone">712345678</string>
     <string name="send_otp">Send OTP</string>
-    <string name="enter_otp_sent">Enter OTP sent</string>
+    <string name="enter_otp_sent">Enter OTP sent to </string>
     <string name="resend_otp">Resend OTP</string>
     <string name="didn_t_receive_the_code">Didn\'t receive the code?</string>
     <string name="verify">verify</string>
     <string name="login_text">Enter the email and password to login</string>
     <string name="no_account_sign_up">No account? Sign Up</string>
-    <string name="mpesa_transactions">MPesa Transactions</string>
+    <string name="mpesa_transactions">Activity</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="welcome_user">Welcome User</string>
+    <string name="date_of_birth">Date of birth DD/MM/YYY</string>
+    <string name="select_gender">Select Gender</string>
+    <string name="request_loan">Request Loan</string>
+    <string name="view_status">View Status</string>
+
+    <string-array name="gender">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -56,7 +56,7 @@ public class OTPVerification extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 buttonVerify.setVisibility(View.INVISIBLE);
 
-                Intent intent = new Intent(getApplicationContext(), Home.class);
+                Intent intent = new Intent(getApplicationContext(), SignupInfo.class);
                 startActivity(intent);
             }
         });
@@ -64,25 +64,6 @@ public class OTPVerification extends AppCompatActivity {
 
     private void setupOTPInputs() {
         inputCode1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!charSequence.toString().trim().isEmpty()) {
-                    inputCode1.requestFocus();
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        inputCode2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -101,7 +82,7 @@ public class OTPVerification extends AppCompatActivity {
 
             }
         });
-        inputCode3.addTextChangedListener(new TextWatcher() {
+        inputCode2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -120,7 +101,7 @@ public class OTPVerification extends AppCompatActivity {
 
             }
         });
-        inputCode4.addTextChangedListener(new TextWatcher() {
+        inputCode3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -139,7 +120,7 @@ public class OTPVerification extends AppCompatActivity {
 
             }
         });
-        inputCode5.addTextChangedListener(new TextWatcher() {
+        inputCode4.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -149,6 +130,25 @@ public class OTPVerification extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!charSequence.toString().trim().isEmpty()) {
                     inputCode5.requestFocus();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        inputCode5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!charSequence.toString().trim().isEmpty()) {
+                    inputCode6.requestFocus();
                 }
 
             }

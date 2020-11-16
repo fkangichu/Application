@@ -1,0 +1,11 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:hint="@string/email"
+    android:importantForAutofill="no"
+    android:layout_marginTop="25dp"
+    android:textColor="@color/colorTextPrimary"
+    android:textSize="20sp"
+    android:textStyle="bold"/>

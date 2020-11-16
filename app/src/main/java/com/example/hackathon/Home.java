@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.hackathon.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,7 +24,7 @@ public class Home extends AppCompatActivity {
 
     DatabaseHelper databaseHelper;
 
-    // Write a message to the database
+//    String full_name = getIntent().getStringExtra("Full name");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class Home extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_loans, R.id.navigation_account)
                 .build();
         NavController navController = Navigation.findNavController(Home.this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(Home.this, navController, appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(Home.this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
         StringBuilder smsBuilder = new StringBuilder();
@@ -98,6 +99,12 @@ public class Home extends AppCompatActivity {
         } catch (SQLiteException e) {
             Log.d("SQLiteException", e.getMessage());
         }
+
+//        Bundle bundle = new Bundle();
+//        bundle.putString("Full name", full_name);
+//        HomeFragment homeFragment = new HomeFragment();
+//        homeFragment.setArguments(bundle);
+
     }
 
     public void AddData(String body, String date) {

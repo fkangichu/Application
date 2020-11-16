@@ -75,6 +75,7 @@
                 android:hint="@string/phone"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
+                android:maxLength="9"
                 android:inputType="number"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="17sp"

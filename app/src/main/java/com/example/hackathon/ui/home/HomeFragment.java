@@ -6,17 +6,13 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListPopupWindow;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -25,15 +21,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hackathon.DatabaseHelper;
 import com.example.hackathon.R;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -57,15 +51,10 @@ public class HomeFragment extends Fragment {
 
     DatabaseHelper databaseHelper;
 
-    ListPopupWindow popupWindow;
-
     Spinner spinnerMonth;
     Spinner spinnerYear;
 
     String yearSelected;
-
-
-//    ListView listTransactions;
 
     Map<String, Float> income = new HashMap<>();
     Map<String, Float> expense = new HashMap<>();
@@ -103,6 +92,13 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+//        Log.d(TAG, "onCreateView: " + getArguments().getString("Full name"));
+
+//        TextView textView = root.findViewById(R.id.text);
+//        textView.setText(String.format(
+//                "Welcome ", getArguments().getString("Full name")
+//        ));
 
         spinnerMonth = root.findViewById(R.id.calenderMonths);
         spinnerYear = root.findViewById(R.id.calenderYears);
@@ -214,9 +210,19 @@ public class HomeFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, final View view, final int position, long id) {
                 final String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
 
-                pieChart.setHoleRadius(45f);
+                pieChart.setHoleRadius(50f);
                 pieChart.setTransparentCircleAlpha(0);
                 pieChart.getLegend().setEnabled(false);
+                pieChart.getDescription().setEnabled(false);
+                pieChart.setCenterText("MPESA Transactions");
+                pieChart.setDrawCenterText(true);
+                pieChart.setRotationEnabled(false);
+                pieChart.setHighlightPerTapEnabled(true);
+                pieChart.setCenterTextSize(15);
+                pieChart.animateY(1400, Easing.EaseInOutQuad);
+                pieChart.setEntryLabelColor(Color.WHITE);
+                pieChart.setEntryLabelTextSize(12f);
+                pieChart.setExtraOffsets(5, 10, 5, 5);
 
                 ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
@@ -225,19 +231,20 @@ public class HomeFragment extends Fragment {
                 pieEntries.add(new PieEntry(transactionOverview[0], "Income"));
                 pieEntries.add(new PieEntry(transactionOverview[1], "Expenses"));
 
-                PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPesa Transactions");
+                PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPESA Transactions");
 
                 ArrayList<Integer> colors = new ArrayList<>();
-                colors.add(Color.BLUE);
-                colors.add(Color.RED);
+                colors.add(Color.GRAY);
+                colors.add(Color.MAGENTA);
 //                colors.add(Color.CYAN);
 //                colors.add(Color.YELLOW);
 
                 PieData pieData = new PieData(pieDataSet);
-                pieDataSet.setSliceSpace(2);
-                pieDataSet.setValueTextSize(12);
-//                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
-                pieDataSet.setColors(colors);
+                pieDataSet.setSliceSpace(5f);
+                pieDataSet.setValueTextSize(14);
+                pieDataSet.setValueTextColor(Color.WHITE);
+                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+//                pieDataSet.setColors(colors);
 
                 pieChart.setData(pieData);
                 pieChart.notifyDataSetChanged();

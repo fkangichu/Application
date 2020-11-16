@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network_security_config xmlns:android="http://schemas.android.com/apk/res/android">
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">e3a825bc5c47.ngrok.io</domain>
+    </domain-config>
+</network_security_config>
