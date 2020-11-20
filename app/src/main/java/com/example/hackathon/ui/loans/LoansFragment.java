@@ -1,6 +1,7 @@
 package com.example.hackathon.ui.loans;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -8,6 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,17 +38,25 @@ import static android.content.ContentValues.TAG;
 public class LoansFragment extends Fragment {
 
     private LoansViewModel loansViewModel;
-    private Button view_status, requestLoan;
-    String value, rates;
+    private Button requestLoan, loan1Request, getLoan;
+    private LinearLayout availableLoans;
+    private String value, rates, rate, amount, rateType;
+    private RadioButton radio_ninjas;
+    private EditText requestDifferentAmount;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         loansViewModel =
                 ViewModelProviders.of(this).get(LoansViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_loans, container, false);
+        final View root = inflater.inflate(R.layout.fragment_loans, container, false);
 
-        view_status = root.findViewById(R.id.view_status);
         requestLoan = root.findViewById(R.id.requestLoan);
+        loan1Request = root.findViewById(R.id.loan1Request);
+
+        requestDifferentAmount = root.findViewById(R.id.requestDifferentAmount);
+        radio_ninjas = root.findViewById(R.id.radio_ninjas);
+
+        getLoan = root.findViewById(R.id.getLoan);
 
         final String ratingCustomerRequest = "{\n" +
                 "\t\"customerId\":\"252525252525\",\n" +
@@ -76,7 +91,7 @@ public class LoansFragment extends Fragment {
                 "}";
 
         try {
-            URL url = new URL("http://e3a825bc5c47.ngrok.io/api/rating/score-customer");
+            URL url = new URL("http://2ea4d4dd669c.ngrok.io/api/rating/score-customer");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -87,7 +102,6 @@ public class LoansFragment extends Fragment {
             StrictMode.setThreadPolicy(policy);
 
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
             os.writeBytes(ratingCustomerRequest);
 
             os.flush();
@@ -122,20 +136,17 @@ public class LoansFragment extends Fragment {
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    String rate = jsonObject.getString("rate");
-                    String amount = jsonObject.getString("amount");
-                    String rateType = jsonObject.getString("rateType");
+                    rate = jsonObject.getString("rate");
+                    amount = jsonObject.getString("amount");
+                    rateType = jsonObject.getString("rateType");
 
-                    Log.i(TAG, "Rate and amount: " + rate + " " + amount + " " + rateType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-//            Log.i(TAG, "Response: " + rates);
-
-
 
             conn.disconnect();
+
         } catch(Exception ex){
             ex.printStackTrace();
         }
@@ -144,18 +155,40 @@ public class LoansFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                availableLoans = root.findViewById(R.id.availableLoans);
+                requestLoan.setVisibility(View.GONE);
+                availableLoans.setVisibility(View.VISIBLE);
+                RequestLoan();
+
             }
         });
 
-        view_status.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Status")
-                        .setMessage("Dear customer, your credit status is " + value).show();
-            }
-        });
+
 
         return root;
     }
+
+    public void RequestLoan() {
+
+        loan1Request.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        LayoutInflater layoutInflater = requireActivity().getLayoutInflater();
+
+                        builder.setView(layoutInflater.inflate(R.layout.layout_request_loan, null))
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                                .show();
+
+
+                    }
+                });
+    }
+
 }

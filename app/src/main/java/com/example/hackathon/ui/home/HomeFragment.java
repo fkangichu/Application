@@ -317,7 +317,7 @@ public class HomeFragment extends Fragment {
                 income.put(date, receivedCashF);
             }
 
-            else if (messageBody.contains("Give")) {
+            else if (messageBody.contains("Give") && messageBody.contains("cash")) {
                 String depositedCash = (StringUtils.substringBetween(messageBody, "Give", "cash")
                         .substring(4)).replace(",", "");
                 Float depositedCashF = Float.parseFloat(depositedCash);
@@ -341,7 +341,7 @@ public class HomeFragment extends Fragment {
                 expense.put(date, payBillF);
             }
 
-            else if (messageBody.contains("sent to")) {
+            else if (messageBody.contains("sent to") && !messageBody.contains("for account")) {
                 String sendMoney = (StringUtils.substringBetween(messageBody, "Confirmed", "sent")
                         .substring(5)).replace(",", "");
                 Float sendMoneyF = Float.parseFloat(sendMoney);
