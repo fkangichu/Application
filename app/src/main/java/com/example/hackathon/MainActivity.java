@@ -6,11 +6,19 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity {
+
+    EditText editTextEmailAddress;
 
     public void Signup(View view) {
         Intent signup = new Intent(getApplicationContext(), Signup.class);
@@ -18,7 +26,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Login(View view) {
-        EditText editTextEmailAddress = findViewById(R.id.email);
+
+        final String emailOrPhone = editTextEmailAddress.getText().toString();
+        editTextEmailAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (isEmail(emailOrPhone)) {
+
+                }
+
+                if (isPhone(emailOrPhone)) {
+
+                }
+            }
+        });
         EditText editTextPassword = findViewById(R.id.password);
 
         if (editTextEmailAddress.getText().toString().matches("") || editTextPassword.getText().toString().matches("")) {
@@ -43,10 +74,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static boolean isEmail(String text) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern p = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
+    public static boolean isPhone(String text) {
+        if(!TextUtils.isEmpty(text)){
+            return TextUtils.isDigitsOnly(text);
+        } else{
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        editTextEmailAddress = findViewById(R.id.email);
+        editTextEmailAddress.requestFocus();
 
     }
 

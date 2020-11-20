@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/profile"
-            android:layout_width="133dp"
-            android:layout_height="109dp"
+            android:layout_width="157dp"
+            android:layout_height="146dp"
             android:layout_marginStart="93dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="93dp"
@@ -28,13 +28,35 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Faith Kangichu"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
             android:id="@+id/welcome_text"
+            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phone_number"
             android:textColor="@color/colorTextPrimary"
             android:textSize="17sp"
             android:textStyle="bold"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSignUp"
+            android:layout_marginTop="10dp"
+            android:layout_margin="30dp"
+            android:background="@color/colorWhite"
+            android:text="Update Account Details"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            style="?android:attr/borderlessButtonStyle"/>
 
     </LinearLayout>
 

@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint="@string/password"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionGo"
             android:importantForAutofill="no"
             android:layout_marginTop="20dp"
             android:inputType="textPassword"

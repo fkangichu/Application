@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -43,6 +45,7 @@ public class LoansFragment extends Fragment {
     private String value, rates, rate, amount, rateType;
     private RadioButton radio_ninjas;
     private EditText requestDifferentAmount;
+    private String m_Text = "";
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -91,7 +94,7 @@ public class LoansFragment extends Fragment {
                 "}";
 
         try {
-            URL url = new URL("http://2ea4d4dd669c.ngrok.io/api/rating/score-customer");
+            URL url = new URL("http://16f124ce0a22.ngrok.io/api/rating/score-customer");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -159,7 +162,6 @@ public class LoansFragment extends Fragment {
                 requestLoan.setVisibility(View.GONE);
                 availableLoans.setVisibility(View.VISIBLE);
                 RequestLoan();
-
             }
         });
 
@@ -174,18 +176,37 @@ public class LoansFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        LayoutInflater layoutInflater = requireActivity().getLayoutInflater();
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                        builder.setView(layoutInflater.inflate(R.layout.layout_request_loan, null))
+                        final EditText input = new EditText(getContext());
+                        builder.setView(input);
+
+                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(input);
+
+                        final CharSequence[] charSequence = new CharSequence[] {"Input Request Amount","Input different amount"};
+
+                        builder.setTitle("Request amount")
+                                .setSingleChoiceItems(charSequence, -1, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                             }
                         })
+                                .setPositiveButton("Get Loan", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        ListView lv = ((AlertDialog)dialogInterface).getListView();
+                                        Log.i(TAG, "onClick: "+ lv.getAdapter().getItem(lv.getCheckedItemPosition()));
+                                    }
+                                })
                                 .show();
-
 
                     }
                 });

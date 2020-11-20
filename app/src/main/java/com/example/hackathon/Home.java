@@ -31,11 +31,6 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference columnBody = database.getReference("Body");
-//        DatabaseReference columnDate = database.getReference("Date");
-
-
         databaseHelper = new DatabaseHelper(this);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -74,9 +69,6 @@ public class Home extends AppCompatActivity {
                     SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
                     String stringDate = DateFor.format(date);
 
-//                    System.out.println(stringDate + " " + date);
-//                    columnBody.setValue(strBody);
-//                    columnDate.setValue(stringDate);
                     AddData(strBody, stringDate);
 
                     smsBuilder.append("[ ");
@@ -99,11 +91,6 @@ public class Home extends AppCompatActivity {
         } catch (SQLiteException e) {
             Log.d("SQLiteException", e.getMessage());
         }
-
-//        Bundle bundle = new Bundle();
-//        bundle.putString("Full name", full_name);
-//        HomeFragment homeFragment = new HomeFragment();
-//        homeFragment.setArguments(bundle);
 
     }
 

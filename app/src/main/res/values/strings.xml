@@ -4,7 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_loans">Loans</string>
     <string name="title_account">Profile</string>
-    <string name="email">Email</string>
+    <string name="email">Email or Phone</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
@@ -24,7 +24,7 @@
     <string name="resend_otp">Resend OTP</string>
     <string name="didn_t_receive_the_code">Didn\'t receive the code?</string>
     <string name="verify">verify</string>
-    <string name="login_text">Enter the email and password to login</string>
+    <string name="login_text">Enter the email /phone and password to login</string>
     <string name="no_account_sign_up">No account? Sign Up</string>
     <string name="mpesa_transactions">Activity</string>
     <string name="confirm_password">Confirm Password</string>
@@ -40,7 +40,16 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string-array name="loanAmount">
+        <item>Input Request Amount</item>
+        <item>Input different amount</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_loan">Get Loan</string>
+    <string name="input_request_amount">Input Request Amount</string>
+    <string name="input_different_amount">Input different amount</string>
+    <string name="get_full_amount">Get full amount</string>
 
 </resources>

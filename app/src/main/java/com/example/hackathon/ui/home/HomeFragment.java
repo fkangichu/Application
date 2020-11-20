@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -87,6 +89,12 @@ public class HomeFragment extends Fragment {
 
     PieChart pieChart;
 
+    float totalIncome;
+    float totalExpense;
+
+    float averageIncome;
+    float averageExpense;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -99,13 +107,28 @@ public class HomeFragment extends Fragment {
 //        textView.setText(String.format(
 //                "Welcome ", getArguments().getString("Full name")
 //        ));
-
         spinnerMonth = root.findViewById(R.id.calenderMonths);
         spinnerYear = root.findViewById(R.id.calenderYears);
 
         databaseHelper = new DatabaseHelper(getActivity());
 
+        totalIncome = 0.0f;
+        totalExpense = 0.0f;
+
         getMessage();
+
+        for (float incomeValue : income.values()) {
+            totalIncome += incomeValue;
+        }
+
+        for (float expenseValue : expense.values()) {
+            totalExpense += expenseValue;
+        }
+
+        averageIncome = totalIncome / monthValues.size();
+        averageExpense = totalExpense / monthValues.size();
+
+//        Log.i(TAG, "Average income: " + averageIncome + " Average expense " + averageExpense);
         addPreviousTransactions();
         setDates();
 
@@ -184,6 +207,9 @@ public class HomeFragment extends Fragment {
         yearValues.clear();
         yearValues.addAll(set);
 
+        monthValues.add("Total");
+        monthValues.add("Average");
+
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, monthValues);
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, yearValues);
 
@@ -208,7 +234,6 @@ public class HomeFragment extends Fragment {
         spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, final View view, final int position, long id) {
-                final String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
 
                 pieChart.setHoleRadius(50f);
                 pieChart.setTransparentCircleAlpha(0);
@@ -224,14 +249,64 @@ public class HomeFragment extends Fragment {
                 pieChart.setEntryLabelTextSize(12f);
                 pieChart.setExtraOffsets(5, 10, 5, 5);
 
-                ArrayList<PieEntry> pieEntries = new ArrayList<>();
+                final String monthSelected = "2020/" + monthString.get((String) parent.getItemAtPosition(position));
 
-                float[] transactionOverview = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
+                if (((String) parent.getItemAtPosition(position)).matches("Total")) {
 
-                pieEntries.add(new PieEntry(transactionOverview[0], "Income"));
-                pieEntries.add(new PieEntry(transactionOverview[1], "Expenses"));
+                    float [] totalTransactions = {totalIncome, totalExpense};
 
-                PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPESA Transactions");
+                    ArrayList<PieEntry> totalEntries = new ArrayList<>();
+                    totalEntries.add(new PieEntry(totalTransactions[0], "Total Income"));
+                    totalEntries.add(new PieEntry(totalTransactions[1], "Total Expenses"));
+
+                    PieDataSet totalPieDataSet = new PieDataSet(totalEntries, "Total transactions");
+
+                    PieData totalPieData = new PieData(totalPieDataSet);
+                    totalPieDataSet.setSliceSpace(5f);
+                    totalPieDataSet.setValueTextSize(14);
+                    totalPieDataSet.setValueTextColor(Color.WHITE);
+                    totalPieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+
+                    pieChart.setData(totalPieData);
+                }
+                else if (((String) parent.getItemAtPosition(position)).matches("Average")) {
+
+                    float [] averageTransactions = {averageIncome, averageExpense};
+
+                    ArrayList<PieEntry> averageEntries = new ArrayList<>();
+                    averageEntries.add(new PieEntry(averageTransactions[0], "Average Income"));
+                    averageEntries.add(new PieEntry(averageTransactions[1], "Average Expenses"));
+
+                    PieDataSet averagePieDataSet = new PieDataSet(averageEntries, "Average transactions");
+
+                    PieData averagePieData = new PieData(averagePieDataSet);
+                    averagePieDataSet.setSliceSpace(5f);
+                    averagePieDataSet.setValueTextSize(14);
+                    averagePieDataSet.setValueTextColor(Color.WHITE);
+                    averagePieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+
+                    pieChart.setData(averagePieData);
+                }
+
+                else {
+                    ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
+                    float[] transactionOverview = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
+
+                    pieEntries.add(new PieEntry(transactionOverview[0], "Income"));
+                    pieEntries.add(new PieEntry(transactionOverview[1], "Expenses"));
+
+                    PieDataSet pieDataSet = new PieDataSet(pieEntries, "MPESA Transactions");
+
+                    PieData pieData = new PieData(pieDataSet);
+                    pieDataSet.setSliceSpace(5f);
+                    pieDataSet.setValueTextSize(14);
+                    pieDataSet.setValueTextColor(Color.WHITE);
+                    pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+
+                    pieChart.setData(pieData);
+                }
+
 
                 ArrayList<Integer> colors = new ArrayList<>();
                 colors.add(Color.GRAY);
@@ -239,14 +314,10 @@ public class HomeFragment extends Fragment {
 //                colors.add(Color.CYAN);
 //                colors.add(Color.YELLOW);
 
-                PieData pieData = new PieData(pieDataSet);
-                pieDataSet.setSliceSpace(5f);
-                pieDataSet.setValueTextSize(14);
-                pieDataSet.setValueTextColor(Color.WHITE);
-                pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+
 //                pieDataSet.setColors(colors);
 
-                pieChart.setData(pieData);
+
                 pieChart.notifyDataSetChanged();
                 pieChart.invalidate();
 
@@ -388,13 +459,6 @@ public class HomeFragment extends Fragment {
 
             monthValues.add(monthString);
             yearValues.add(year);
-        }
-
-        for (Map.Entry<String, Float> receivedCashEntry  : income_receivedCash.entrySet()) {
-            String key = receivedCashEntry.getKey().split("-")[0] + "/" + receivedCashEntry.getKey().split("-")[1];
-            Float value = receivedCashEntry.getValue();
-            Float oldValue = receivedCashResult.get(key) != null ? receivedCashResult.get(key) : 0;
-            receivedCashResult.put(key, oldValue + value);
         }
     }
 }
