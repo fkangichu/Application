@@ -12,20 +12,21 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/title_loans"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loanHeader"
+            android:layout_marginTop="20dp"
+            android:text="@string/title_loans"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
 
         <Button
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/requestLoan"
-            android:layout_margin="30dp"
+            android:layout_margin="100dp"
             android:background="@color/colorPrimary"
             android:text="@string/request_loan"
             android:textSize="16sp"
@@ -45,7 +46,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Available Loans"
                 android:textColor="@color/colorTextPrimary"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold"/>
 
             <androidx.cardview.widget.CardView
@@ -74,7 +75,7 @@
 
                     <TextView
                         android:id="@+id/loan1rate"
-                        android:text="0.14"
+                        android:text="Rate: 0.14"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -86,15 +87,15 @@
 
                     <TextView
                         android:id="@+id/loan1Amount"
-                        android:text="10,000"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:layout_marginStart="120dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="50dp"
                         android:gravity="center"
+                        android:text="Amount: 10,000"
                         android:textColor="@color/colorTextPrimary"
-                        android:textSize="19sp"/>
+                        android:textSize="19sp" />
 
                     <Button
                         android:layout_width="200dp"
@@ -137,7 +138,7 @@
 
                     <TextView
                         android:id="@+id/LOAN2rate"
-                        android:text="0.15"
+                        android:text="Rate: 0.15"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -149,7 +150,7 @@
 
                     <TextView
                         android:id="@+id/loan2amount"
-                        android:text="16,000"
+                        android:text="Amount: 16,000"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -200,7 +201,7 @@
 
                     <TextView
                         android:id="@+id/loan3rate"
-                        android:text="0.18"
+                        android:text="Rate: 0.18"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -212,7 +213,7 @@
 
                     <TextView
                         android:id="@+id/loan3amount"
-                        android:text="28000"
+                        android:text="Amount: 28000"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -263,7 +264,7 @@
 
                     <TextView
                         android:id="@+id/loan4rate"
-                        android:text="0.2"
+                        android:text="Rate: 0.2"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"
@@ -275,7 +276,7 @@
 
                     <TextView
                         android:id="@+id/loan4amount"
-                        android:text="30000"
+                        android:text="Amount: 30000"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="120dp"

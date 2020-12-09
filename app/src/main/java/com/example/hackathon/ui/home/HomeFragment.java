@@ -134,7 +134,6 @@ public class HomeFragment extends Fragment {
 
         pieChart = root.findViewById(R.id.mpesaTransactions);
 
-
         return root;
     }
 
@@ -307,17 +306,12 @@ public class HomeFragment extends Fragment {
                     pieChart.setData(pieData);
                 }
 
-
                 ArrayList<Integer> colors = new ArrayList<>();
                 colors.add(Color.GRAY);
                 colors.add(Color.MAGENTA);
 //                colors.add(Color.CYAN);
 //                colors.add(Color.YELLOW);
-
-
 //                pieDataSet.setColors(colors);
-
-
                 pieChart.notifyDataSetChanged();
                 pieChart.invalidate();
 
@@ -326,6 +320,8 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onValueSelected(Entry e, Highlight h) {
                         PieEntry pe = (PieEntry) e;
+
+
 
                         String[] incomeItems = {
                                 "Received Cash KSH " + receivedCashResult.get(monthSelected),
@@ -384,6 +380,7 @@ public class HomeFragment extends Fragment {
                 String receivedCash = (StringUtils.substringBetween(messageBody, "received", "from")
                         .substring(4)).replace(",", "");
                 Float receivedCashF = Float.parseFloat(receivedCash);
+//                Log.i(TAG, "Received: " + receivedCash);
                 income_receivedCash.put(date, receivedCashF);
                 income.put(date, receivedCashF);
             }
@@ -392,6 +389,7 @@ public class HomeFragment extends Fragment {
                 String depositedCash = (StringUtils.substringBetween(messageBody, "Give", "cash")
                         .substring(4)).replace(",", "");
                 Float depositedCashF = Float.parseFloat(depositedCash);
+//                Log.i(TAG, "Deposited: " + depositedCash);
                 income_depositedCash.put(date, depositedCashF);
                 income.put(date, depositedCashF);
             }
@@ -400,6 +398,7 @@ public class HomeFragment extends Fragment {
                 String airtimeExpense = (StringUtils.substringBetween(messageBody, "bought", "of")
                         .substring(4)).replace(",", "");
                 Float airtimeExpenseF = Float.parseFloat(airtimeExpense);
+//                Log.i(TAG, "Airtime: " + airtimeExpense);
                 expense_airtime.put(date, airtimeExpenseF);
                 expense.put(date, airtimeExpenseF);
             }
@@ -408,6 +407,7 @@ public class HomeFragment extends Fragment {
                 String payBill = (StringUtils.substringBetween(messageBody, "Confirmed", "sent")
                         .substring(5)).replace(",", "");
                 Float payBillF = Float.parseFloat(payBill);
+//                Log.i(TAG, "Paybill: " + payBill);
                 expense_payBill.put(date, payBillF);
                 expense.put(date, payBillF);
             }
@@ -416,6 +416,7 @@ public class HomeFragment extends Fragment {
                 String sendMoney = (StringUtils.substringBetween(messageBody, "Confirmed", "sent")
                         .substring(5)).replace(",", "");
                 Float sendMoneyF = Float.parseFloat(sendMoney);
+//                Log.i(TAG, "Send money: "+ sendMoney);
                 expense_sendMoney.put(date, sendMoneyF);
                 expense.put(date, sendMoneyF);
             }
@@ -424,6 +425,7 @@ public class HomeFragment extends Fragment {
                 String withdrawExpense = (StringUtils.substringBetween(messageBody, "Withdraw", "from")
                         .substring(4)).replace(",", "");
                 Float withdrawExpenseF = Float.parseFloat(withdrawExpense);
+//                Log.i(TAG, "Withdraw: " + withdrawExpense);
                 expense_withdraw.put(date, withdrawExpenseF);
                 expense.put(date, withdrawExpenseF);
             }
@@ -432,6 +434,7 @@ public class HomeFragment extends Fragment {
                 String buyGoodsAndServices = (StringUtils.substringBetween(messageBody, "Confirmed", "paid")
                         .substring(5)).replace(",", "");
                 Float buyGoodsAndServicesF = Float.parseFloat(buyGoodsAndServices);
+//                Log.i(TAG, "Buy goods and services: " + buyGoodsAndServices);
                 expense_buyGoodsAndServices.put(date, buyGoodsAndServicesF);
                 expense.put(date, buyGoodsAndServicesF);
             }
@@ -461,4 +464,21 @@ public class HomeFragment extends Fragment {
             yearValues.add(year);
         }
     }
+//    public static <T, K> Map<K, T>
+//    replaceNullValues(Map<K, T> map, T defaultValue)
+//    {
+//
+//        // Replace the null value
+//        map = map.entrySet()
+//                .stream()
+//                .map(entry -> {
+//                    if (entry.getValue() == null)
+//                        entry.setValue(defaultValue);
+//                    return entry;
+//                })
+//                .collect(Collectors.toMap(Map.Entry::getKey,
+//                        Map.Entry::getValue));
+//
+//        return map;
+//    }
 }

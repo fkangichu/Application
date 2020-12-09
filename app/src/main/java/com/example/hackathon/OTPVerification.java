@@ -34,6 +34,8 @@ public class OTPVerification extends AppCompatActivity {
         inputCode5 = findViewById(R.id.inputCode5);
         inputCode6 = findViewById(R.id.inputCode6);
 
+        inputCode1.requestFocus();
+
         setupOTPInputs();
 
         final ProgressBar progressBar = findViewById(R.id.progressBar);

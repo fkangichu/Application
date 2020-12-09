@@ -29,12 +29,13 @@ import java.util.concurrent.TimeUnit;
 
         final ProgressBar progressBar = findViewById(R.id.progressBar);
 
+        inputPhone.requestFocus();
+
         buttonSendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (inputPhone.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(Signup.this, "Input phone number",
-                            Toast.LENGTH_SHORT).show();
+                    inputPhone.setError("Input phone number");
                     return;
                 }
 
