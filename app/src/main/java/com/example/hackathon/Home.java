@@ -50,6 +50,7 @@ public class Home extends AppCompatActivity {
         try {
             Uri uri = Uri.parse(SMS_URI_INBOX);
             String[] projection = new String[] { "_id", "address", "person", "body", "date", "type" };
+            databaseHelper.deleteData();
             Cursor cur = getContentResolver().query(uri, projection, "address='MPESA'", null, "date desc");
 
             if (cur.moveToFirst()) {

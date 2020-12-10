@@ -290,7 +290,10 @@ public class HomeFragment extends Fragment {
                 else {
                     ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
-                    float[] transactionOverview = {incomeResult.get(monthSelected), expenseResult.get(monthSelected)};
+                    float[] transactionOverview = {
+                            incomeResult.get(monthSelected) != null ? incomeResult.get(monthSelected) : 0,
+                            expenseResult.get(monthSelected) != null ? expenseResult.get(monthSelected) : 0
+                    };
 
                     pieEntries.add(new PieEntry(transactionOverview[0], "Income"));
                     pieEntries.add(new PieEntry(transactionOverview[1], "Expenses"));
@@ -321,19 +324,25 @@ public class HomeFragment extends Fragment {
                     public void onValueSelected(Entry e, Highlight h) {
                         PieEntry pe = (PieEntry) e;
 
-
+                        float receivedCashWithoutNull = receivedCashResult.get(monthSelected) != null ? receivedCashResult.get(monthSelected) : 0;
+                        float depositedCashWithoutNull = depositedCashResult.get(monthSelected) != null ? depositedCashResult.get(monthSelected) : 0;
+                        float airtimeWithoutNull = airtimeResult.get(monthSelected) != null ? airtimeResult.get(monthSelected) : 0;
+                        float sentCashWithoutNull = sendMoneyResult.get(monthSelected) != null ? sendMoneyResult.get(monthSelected) : 0;
+                        float withdrawnCashWithoutNull = withdrawResult.get(monthSelected) != null ? withdrawResult.get(monthSelected) : 0;
+                        float paybillWithoutNull = paybillResult.get(monthSelected) != null ? paybillResult.get(monthSelected) : 0;
+                        float buyGoodsAndServicesWithoutNull = buyGoodsAndServicesResult.get(monthSelected) != null ? buyGoodsAndServicesResult.get(monthSelected) : 0;
 
                         String[] incomeItems = {
-                                "Received Cash KSH " + receivedCashResult.get(monthSelected),
-                                "Deposited Cash KSH " + depositedCashResult.get(monthSelected)
+                                "Received Cash KSH " + receivedCashWithoutNull,
+                                "Deposited Cash KSH " + depositedCashWithoutNull
                         };
 
                         String[] expenseItems = {
-                                "Airtime KSH " + airtimeResult.get(monthSelected),
-                                "Sent Money KSH " + sendMoneyResult.get(monthSelected),
-                                "Withdrawn Cash KSH " + withdrawResult.get(monthSelected),
-                                "PayBill KSH " + paybillResult.get(monthSelected),
-                                "Buy Goods and Services KSH " + buyGoodsAndServicesResult.get(monthSelected)
+                                "Airtime KSH " + airtimeWithoutNull,
+                                "Sent Money KSH " + sentCashWithoutNull,
+                                "Withdrawn Cash KSH " + withdrawnCashWithoutNull,
+                                "PayBill KSH " + paybillWithoutNull,
+                                "Buy Goods and Services KSH " + buyGoodsAndServicesWithoutNull
                         };
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -371,7 +380,7 @@ public class HomeFragment extends Fragment {
 
     private void getMessage() {
         Cursor data = databaseHelper.getData();
-
+        int itr_index = 0;
         while (data.moveToNext()) {
             String messageBody = data.getString(1);
             String date = data.getString(2);
@@ -400,7 +409,7 @@ public class HomeFragment extends Fragment {
                 Float airtimeExpenseF = Float.parseFloat(airtimeExpense);
 //                Log.i(TAG, "Airtime: " + airtimeExpense);
                 expense_airtime.put(date, airtimeExpenseF);
-                expense.put(date, airtimeExpenseF);
+                expense.put(date.concat("."+itr_index), airtimeExpenseF);
             }
 
             else if (messageBody.contains("sent to") && messageBody.contains("for account")) {
@@ -409,7 +418,7 @@ public class HomeFragment extends Fragment {
                 Float payBillF = Float.parseFloat(payBill);
 //                Log.i(TAG, "Paybill: " + payBill);
                 expense_payBill.put(date, payBillF);
-                expense.put(date, payBillF);
+                expense.put(date.concat("."+itr_index), payBillF);
             }
 
             else if (messageBody.contains("sent to") && !messageBody.contains("for account")) {
@@ -418,7 +427,7 @@ public class HomeFragment extends Fragment {
                 Float sendMoneyF = Float.parseFloat(sendMoney);
 //                Log.i(TAG, "Send money: "+ sendMoney);
                 expense_sendMoney.put(date, sendMoneyF);
-                expense.put(date, sendMoneyF);
+                expense.put(date.concat("."+itr_index), sendMoneyF);
             }
 
             else if (messageBody.contains("Withdraw")) {
@@ -427,7 +436,7 @@ public class HomeFragment extends Fragment {
                 Float withdrawExpenseF = Float.parseFloat(withdrawExpense);
 //                Log.i(TAG, "Withdraw: " + withdrawExpense);
                 expense_withdraw.put(date, withdrawExpenseF);
-                expense.put(date, withdrawExpenseF);
+                expense.put(date.concat("."+itr_index), withdrawExpenseF);
             }
 
             else if (messageBody.contains("paid")) {
@@ -436,8 +445,9 @@ public class HomeFragment extends Fragment {
                 Float buyGoodsAndServicesF = Float.parseFloat(buyGoodsAndServices);
 //                Log.i(TAG, "Buy goods and services: " + buyGoodsAndServices);
                 expense_buyGoodsAndServices.put(date, buyGoodsAndServicesF);
-                expense.put(date, buyGoodsAndServicesF);
+                expense.put(date.concat("."+itr_index), buyGoodsAndServicesF);
             }
+            itr_index++;
         }
 
         for (Map.Entry<String, Float> incomeEntry  : income.entrySet()) {
@@ -448,6 +458,7 @@ public class HomeFragment extends Fragment {
         }
 
         for (Map.Entry<String, Float> expenseEntry  : expense.entrySet()) {
+//            Log.i(TAG, "getMessage: " + expenseEntry.getKey());
             String key = expenseEntry.getKey().split("-")[0] + "/" + expenseEntry.getKey().split("-")[1];
             Float value = expenseEntry.getValue();
             Float oldValue = expenseResult.get(key) != null ? expenseResult.get(key) : 0;

@@ -97,8 +97,8 @@
         <com.github.mikephil.charting.charts.PieChart
             android:layout_marginTop="40dp"
             android:id="@+id/mpesaTransactions"
-            android:layout_width="400dp"
-            android:layout_height="400dp" />
+            android:layout_width="390dp"
+            android:layout_height="390dp" />
 
     </LinearLayout>
 

@@ -56,4 +56,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor data = db.rawQuery(bodyQuery, null);
         return data;
     }
+
+    public void deleteData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        //String delete_query = "DELETE FROM transactionsData WHERE 1";
+        //db.rawQuery(delete_query, null);
+        db.delete(TABLE_NAME, "1 = 1", null);
+    }
 }
