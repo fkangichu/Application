@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +48,8 @@ public class LoansFragment extends Fragment {
     private RadioButton radio_ninjas;
     private EditText requestDifferentAmount;
     private TextView loanHeader;
+    public String response_data = "";
+    ListView availableLoansListView;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -54,19 +57,21 @@ public class LoansFragment extends Fragment {
                 ViewModelProviders.of(this).get(LoansViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_loans, container, false);
 
-        requestLoan = root.findViewById(R.id.requestLoan);
+        //requestLoan = root.findViewById(R.id.requestLoan);
 
-        loan1Request = root.findViewById(R.id.loan1Request);
-        loan2Request = root.findViewById(R.id.loan2Request);
-        loan3Request = root.findViewById(R.id.loan3Request);
-        loan4Request = root.findViewById(R.id.loan4Request);
+        //loan1Request = root.findViewById(R.id.loan1Request);
+        //loan2Request = root.findViewById(R.id.loan2Request);
+        //loan3Request = root.findViewById(R.id.loan3Request);
+        //loan4Request = root.findViewById(R.id.loan4Request);
+
+        availableLoansListView = root.findViewById(R.id.availableLoansListView);
 
         requestDifferentAmount = root.findViewById(R.id.requestDifferentAmount);
         radio_ninjas = root.findViewById(R.id.radio_ninjas);
 
         getLoan = root.findViewById(R.id.getLoan);
 
-        loanHeader = root.findViewById(R.id.loanHeader);
+        //loanHeader = root.findViewById(R.id.loanHeader);
 
         final String ratingCustomerRequest = "{\n" +
                 "\t\"customerId\":\"252525252525\",\n" +
@@ -101,7 +106,7 @@ public class LoansFragment extends Fragment {
                 "}";
 
         try {
-            URL url = new URL("http://e6cb9d6a310a.ngrok.io/api/rating/score-customer");
+            URL url = new URL("http://5950b7caf434.ngrok.io/api/rating/score-customer-universal");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -136,7 +141,7 @@ public class LoansFragment extends Fragment {
                 response.append(currentLine);
 
             in.close();
-
+            response_data = response.toString();
             JSONObject jsonResponse = new JSONObject(response.toString());
             value = jsonResponse.getString("finalScoreName");
             rates = jsonResponse.getString("rates");
@@ -161,17 +166,61 @@ public class LoansFragment extends Fragment {
             ex.printStackTrace();
         }
 
-        requestLoan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                availableLoans = root.findViewById(R.id.availableLoans);
-                requestLoan.setVisibility(View.GONE);
-                loanHeader.setVisibility(View.GONE);
-                availableLoans.setVisibility(View.VISIBLE);
-                RequestLoan();
+        LoanListAdapter loanListAdapter = new LoanListAdapter(getContext(), response_data);
+
+        availableLoansListView.setAdapter(loanListAdapter);
+
+        availableLoansListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                final EditText input = new EditText(getContext());
+                builder.setView(input);
+
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                final CharSequence[] charSequence = new CharSequence[] {"Get full amount","Input different amount"};
+
+                builder.setTitle("Request amount")
+                        .setSingleChoiceItems(charSequence, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setPositiveButton("Get Loan", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ListView lv = ((AlertDialog)dialogInterface).getListView();
+                                Log.i(TAG, "onClick: "+ lv.getAdapter().getItem(lv.getCheckedItemPosition()));
+                            }
+                        })
+                        .show();
+
             }
         });
+
+//        requestLoan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                availableLoans = root.findViewById(R.id.availableLoans);
+//                //requestLoan.setVisibility(View.GONE);
+//                //loanHeader.setVisibility(View.GONE);
+//                //availableLoans.setVisibility(View.VISIBLE);
+//                //RequestLoan();
+//            }
+//        });
 
 
 
@@ -180,44 +229,44 @@ public class LoansFragment extends Fragment {
 
     public void RequestLoan() {
 
-        loan1Request.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                        final EditText input = new EditText(getContext());
-                        builder.setView(input);
-
-                        input.setInputType(InputType.TYPE_CLASS_TEXT);
-                        builder.setView(input);
-
-                        final CharSequence[] charSequence = new CharSequence[] {"Get full amount","Input different amount"};
-
-                        builder.setTitle("Request amount")
-                                .setSingleChoiceItems(charSequence, -1, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                                .setPositiveButton("Get Loan", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        ListView lv = ((AlertDialog)dialogInterface).getListView();
-                                        Log.i(TAG, "onClick: "+ lv.getAdapter().getItem(lv.getCheckedItemPosition()));
-                                    }
-                                })
-                                .show();
-
-                    }
-                });
+//        loan1Request.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//
+//                        final EditText input = new EditText(getContext());
+//                        builder.setView(input);
+//
+//                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                        builder.setView(input);
+//
+//                        final CharSequence[] charSequence = new CharSequence[] {"Get full amount","Input different amount"};
+//
+//                        builder.setTitle("Request amount")
+//                                .setSingleChoiceItems(charSequence, -1, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                                    }
+//                                })
+//                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                            }
+//                        })
+//                                .setPositiveButton("Get Loan", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//                                        ListView lv = ((AlertDialog)dialogInterface).getListView();
+//                                        Log.i(TAG, "onClick: "+ lv.getAdapter().getItem(lv.getCheckedItemPosition()));
+//                                    }
+//                                })
+//                                .show();
+//
+//                    }
+//                });
 
         loan2Request.setOnClickListener(new View.OnClickListener() {
             @Override
