@@ -106,7 +106,7 @@ public class LoansFragment extends Fragment {
                 "}";
 
         try {
-            URL url = new URL("http://5950b7caf434.ngrok.io/api/rating/score-customer-universal");
+            URL url = new URL("http://f3a73c967c9c.ngrok.io/api/rating/score-customer-universal");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
